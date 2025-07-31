@@ -40,6 +40,9 @@ public class Principal {
                     buscarLibroPorTitulo();
 
                     break;
+                case 0:
+                    System.out.println("Cerrando aplicación... Gracias. :)");
+                    break;
                 default:
                     System.out.println("Escoja una opción válida.");
             }
