@@ -23,7 +23,7 @@ public class Principal {
 
             switch (opcion){
                 case 1:
-                    buscarLibroPorTitulo();
+                    //buscarLibroPorTitulo();
                     break;
                 default:
                     System.out.println("Escoja una opción válida.");
