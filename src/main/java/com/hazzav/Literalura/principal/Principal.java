@@ -58,6 +58,14 @@ public class Principal {
         return respuesta;
     }
 
+    /**
+     * Metodo que busca un libro en la lista de libros ya buscados previamente
+     * @return
+     */
+    private boolean buscarLibroYaEnLista(){
+
+    }
+
     private void buscarLibroPorTitulo() {
         Optional<DatosLibro> libroBuscado = obtenerRespuestaAPI().resultados().stream()
                 .findFirst();

@@ -13,13 +13,9 @@ public class Libro {
     public Libro(DatosLibro datosLibro) {
         this.titulo = Optional.ofNullable(datosLibro.titulo()).orElse("Título no disponible");
 
-        this.autor = Optional.ofNullable(datosLibro.autores())
-                .flatMap(autores -> autores.stream()
-                        .findFirst())
-                .map(Autor::new)
-                .orElse(null);
+        this.autor = getAutor(datosLibro);
 
-        this.idioma = Optional.ofNullable(datosLibro.idiomas().get(0)).orElse(null);
+        this.idioma = getPrimerIdioma(datosLibro);
 
         this.descargas = Optional.ofNullable(datosLibro.descargas()).orElse(0.0);
 
@@ -40,12 +36,12 @@ public class Libro {
         this.autor = autor;
     }
 
-    public String getIdiomas() {
+    public String getIdioma() {
         return idioma;
     }
 
-    public void setIdiomas(String idiomas) {
-        this.idioma = idiomas;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
     public Double getDescargas() {
@@ -56,11 +52,26 @@ public class Libro {
         this.descargas = descargas;
     }
 
+    private Autor getAutor(DatosLibro datosLibro){
+        return Optional.ofNullable(datosLibro.autores())
+                .flatMap(autores -> autores.stream()
+                        .findFirst())
+                .map(Autor::new)
+                .orElse(null);
+    }
+
+    private String getPrimerIdioma(DatosLibro datosLibro){
+        return Optional.ofNullable(datosLibro.idiomas())
+                .filter(l -> !l.isEmpty())
+                .map(idioma -> idioma.get(0))
+                .orElse("Desconocido.");
+    }
+
     @Override
     public String toString() {
         return  "Titulo='" + titulo + '\'' +
-                ", autores=" + autor +
-                ", idiomas=" + idioma +
-                ", descargas=" + descargas;
+                ", Autor=" + autor +
+                ", Idiomas=" + idioma +
+                ", Descargas=" + descargas;
     }
 }
