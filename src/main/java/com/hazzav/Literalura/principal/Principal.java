@@ -1,20 +1,20 @@
 package com.hazzav.Literalura.principal;
 
 import com.hazzav.Literalura.model.DatosLibro;
+import com.hazzav.Literalura.model.Libro;
 import com.hazzav.Literalura.model.RespuestaAPI;
 import com.hazzav.Literalura.service.ConsumoAPI;
 import com.hazzav.Literalura.service.ConvierteDatos;
 
-import java.util.InputMismatchException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Principal {
+    private final String URL_BASE = "https://gutendex.com/books/";
+    private static final String BUSQUEDA = "?search=";
     private Scanner sc = new Scanner(System.in);
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
-    private final String URL_BASE = "https://gutendex.com/books/";
-    private static final String BUSQUEDA = "?search=";
+    private List<Libro> libros = new ArrayList<>();
 
     public void muestraElMenu() {
         int opcion = -1;
@@ -63,12 +63,13 @@ public class Principal {
      * @return
      */
     private boolean buscarLibroYaEnLista(){
-
+        return false;
     }
 
     private void buscarLibroPorTitulo() {
         Optional<DatosLibro> libroBuscado = obtenerRespuestaAPI().resultados().stream()
                 .findFirst();
+        libroBuscado.ifPresent(datitosLibro -> libros.add(new Libro(datitosLibro)));
 
         System.out.println(libroBuscado.orElse(null));
     }
