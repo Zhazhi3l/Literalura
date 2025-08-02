@@ -1,14 +1,23 @@
 package com.hazzav.Literalura.model;
 
-import java.util.List;
+import jakarta.persistence.*;
+
 import java.util.Optional;
 
+@Entity
+@Table(name = "libros")
 public class Libro {
-    // Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    @Column(unique = true)
     private String titulo;
     private String idioma;
-    private Autor autor;
     private Double descargas;
+    @ManyToOne
+    private Autor autor;
+
+    public Libro() {}
 
     public Libro(DatosLibro datosLibro) {
         this.titulo = Optional.ofNullable(datosLibro.titulo()).orElse("Título no disponible");
@@ -20,6 +29,15 @@ public class Libro {
         this.descargas = Optional.ofNullable(datosLibro.descargas()).orElse(0.0);
 
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }

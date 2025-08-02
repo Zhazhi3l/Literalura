@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@Entity
-//@Table(name = "autor")
+@Entity
+@Table(name = "autores")
 public class Autor {
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nombre;
     private Integer anoNacimiento;
     private Integer anoFallecimiento;
-    //@OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros = new ArrayList<>();
 
     public Autor() {}
@@ -45,6 +45,7 @@ public class Autor {
     }
 
     public void setLibros(List<Libro> libros) {
+        libros.forEach(librillos -> librillos.setAutor(this));
         this.libros = libros;
     }
 
