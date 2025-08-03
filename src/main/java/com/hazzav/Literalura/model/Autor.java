@@ -65,6 +65,11 @@ public class Autor {
         this.anoFallecimiento = anoFallecimiento;
     }
 
+    public void addLibro(Libro libro) {
+        libro.setAutor(this);
+        libros.add(libro);
+    }
+
     @Override
     public String toString() {
         return  "Nombre='" + nombre + '\'' +

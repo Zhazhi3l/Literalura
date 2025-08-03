@@ -22,34 +22,54 @@ public class LibroService {
     private final String URL_BASE = "https://gutendex.com/books/";
     private final String BUSQUEDA = "?search=";
 
-    public void buscarLibroWeb(){
+    public void buscarLibroWeb() {
         System.out.println("Escriba el titulo del libro que desea buscar:");
         String tituloLibro = sc.nextLine();
 
         // Validación de existencia
-        Optional<Libro> libroExistente = libroRepository.findLibroByTituloContainingIgnoreCase(tituloLibro);
-        if(libroExistente.isPresent()){
+        Optional<Libro> libroExistente =
+                libroRepository.findLibroByTituloContainingIgnoreCase(tituloLibro);
+        if (libroExistente.isPresent()) {
             System.out.println("Ya estaba registrado el libro: " + libroExistente.get());
             return;
         }
 
-        var json = consumoAPI.obtenerDatos(URL_BASE + BUSQUEDA + tituloLibro.replace(" ","%20"));
+        //  Consumir de la API
+        var json = consumoAPI.obtenerDatos(
+                URL_BASE + BUSQUEDA + tituloLibro.replace(" ", "%20"));
         RespuestaAPI respuesta = conversor.obtenerDatos(json, RespuestaAPI.class);
         //System.out.println(respuesta); // prueba
 
-        Optional<DatosLibro> datosLibro = respuesta.resultados()
+        //Primer libro e informar
+        Optional<DatosLibro> libroEncontrado = respuesta.resultados()
                 .stream()
                 .findFirst();
 
-        Optional<DatosAutor> datosAutor = datosLibro
-                .flatMap(libro -> libro.autores()
-                        .stream()
-                        .findFirst());
+        if (libroEncontrado.isPresent()) {
+            System.out.println("Resultado encontrado: " + libroEncontrado.get());
+        } else {
+            System.out.println("No se encontraron resultados.");
+            return;
+        }
+        DatosLibro datosLibro = libroEncontrado.get();
 
+        // Obtener autor
+        Optional<DatosAutor> datosAutor = datosLibro.autores()
+                .stream()
+                .findFirst();
+
+        // Creacion autor
         Autor autor = datosAutor
-                .map(autorService::obtenerOCrearAutor);
+                .map(autorService::obtenerOCrearAutor)
+                .orElseGet(
+                        () -> autorService.obtenerOCrearAutor(
+                                new DatosAutor("Desconocido", 0, 0)));
 
-        Libro libro = new Libro(datosLibro.get());
-        libro.setAutor(autor);
+        // Crear librillo y guardar junto con Autor
+        Libro libro = new Libro(datosLibro);
+        autor.addLibro(libro);
+        autorService.guardarAutor(autor);
+
+        System.out.println("Libro registrado: " + libro);
     }
 }

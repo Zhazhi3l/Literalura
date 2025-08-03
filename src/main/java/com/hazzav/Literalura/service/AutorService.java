@@ -15,14 +15,20 @@ public class AutorService {
 
     public Autor obtenerOCrearAutor(DatosAutor datosAutor) {
         String nombre = Optional.ofNullable(datosAutor.nombre())
-                .orElse("Autor desconocido");
+                .orElse("Desconocido");
 
-        Autor autor =  autorRepository.findByNombreContaining(nombre);
+        Autor autor = autorRepository
+                .findByNombreContainingIgnoreCase(nombre);
 
-        if(autor != null)
+        if (autor != null) {
             return autor;
-        else
-            return autorRepository.save(new Autor(datosAutor));
+        }
+        return autorRepository.save(new Autor(datosAutor));
     }
+
+    public Autor guardarAutor(Autor autor) {
+        return autorRepository.save(autor);
+    }
+
 
 }
