@@ -14,18 +14,15 @@ public class Libro {
     private String titulo;
     private String idioma;
     private Double descargas;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Autor autor;
 
     public Libro() {}
 
     public Libro(DatosLibro datosLibro) {
         this.titulo = Optional.ofNullable(datosLibro.titulo()).orElse("Título no disponible");
-
         this.autor = getAutor(datosLibro);
-
         this.idioma = getPrimerIdioma(datosLibro);
-
         this.descargas = Optional.ofNullable(datosLibro.descargas()).orElse(0.0);
 
     }
@@ -88,7 +85,7 @@ public class Libro {
     @Override
     public String toString() {
         return  "Titulo='" + titulo + '\'' +
-                ", Autor=" + autor +
+                ", Autor=" + autor.getNombre() +
                 ", Idiomas=" + idioma +
                 ", Descargas=" + descargas;
     }

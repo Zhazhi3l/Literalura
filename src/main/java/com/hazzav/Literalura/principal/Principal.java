@@ -6,19 +6,22 @@ import com.hazzav.Literalura.model.Libro;
 import com.hazzav.Literalura.model.RespuestaAPI;
 import com.hazzav.Literalura.repositorio.AutorRepository;
 import com.hazzav.Literalura.repositorio.LibroRepository;
+import com.hazzav.Literalura.service.AutorService;
 import com.hazzav.Literalura.service.ConsumoAPI;
 import com.hazzav.Literalura.service.ConvierteDatos;
+import com.hazzav.Literalura.service.LibroService;
 
 import java.util.*;
 
 public class Principal {
-    private final String URL_BASE = "https://gutendex.com/books/";
-    private static final String BUSQUEDA = "?search=";
+
     private Scanner sc = new Scanner(System.in);
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private ConvierteDatos conversor = new ConvierteDatos();
     private AutorRepository autorRepository;
+    private AutorService servicioAutor;
     private LibroRepository libroRepository;
+    private LibroService servicioLibro;
     private List<Libro> libros = new ArrayList<>();
     private List<Autor> autores = new ArrayList<>();
 
@@ -47,7 +50,7 @@ public class Principal {
 
             switch (opcion){
                 case 1:
-                    buscarLibroPorTitulo();
+                    servicioLibro.buscarLibroWeb();
                     break;
                 case 2:
                     listarLibrosRegistrados();
@@ -64,31 +67,20 @@ public class Principal {
         }
     }
 
-    private RespuestaAPI obtenerRespuestaAPI() {
-        System.out.println("Escriba el titulo del libro que desea buscar:");
-        String tituloLibro = sc.nextLine();
-        var json = consumoAPI.obtenerDatos(URL_BASE + BUSQUEDA + tituloLibro.replace(" ","%20"));
-        RespuestaAPI respuesta = conversor.obtenerDatos(json, RespuestaAPI.class);
-        //System.out.println(respuesta); // prueba
-        return respuesta;
-    }
 
-    /**
-     * Metodo que busca un libro en la lista de libros ya buscados previamente
-     * @return
-     */
-    private boolean buscarLibroYaEnLista(){
-        return false;
-    }
-
+    /*
     private void buscarLibroPorTitulo() {
         Optional<DatosLibro> libroBuscado = obtenerRespuestaAPI()
                 .resultados().stream()
                 .findFirst();
 
         if (libroBuscado.isPresent()){
-            libros.add(new Libro(libroBuscado.get()));
-            autores.add(new Autor(libroBuscado.get().autores().get(0)));
+            //libros.add(new Libro(libroBuscado.get()));
+            //autores.add(new Autor(libroBuscado.get().autores().get(0)));
+
+            Libro librillo = new Libro(libroBuscado.get());
+            libroRepository.save(librillo);
+
             System.out.println("Resultado encontrado: "
                 + libroBuscado.get().titulo()
                 + ", Autor: "
@@ -96,7 +88,8 @@ public class Principal {
         } else {
             System.out.println("No se encontró el libro.");
         }
-    }
+    }*/
+
 
     private void listarLibrosRegistrados(){
         if (!libros.isEmpty())
