@@ -52,7 +52,12 @@ spring.datasource.password=tu_contraseña
 ```
 
 ## ✅ Tecnologías utilizadas 
-<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Spring_Logo.png" alt="Spring" width="90"><img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Jpa_logo.png" alt="JPA" width="70"><img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL" width="60"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Java_logo_icon.svg" alt="Java" width="60"></p>
+<p align="center">
+  <img src="https://www.logo.wine/a/logo/Java_(programming_language)/Java_(programming_language)-Logo.wine.svg" alt="Java" height="90"/>
+  <img src="https://www.logo.wine/a/logo/Spring_Framework/Spring_Framework-Logo.wine.svg" alt="Spring" height="90"/>
+  <img src="https://www.svgrepo.com/show/500908/jpa.svg" alt="JPA" height="90"/>
+  <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" height="90"/>
+</p>
 
 ## 🔨 ¿Cómo utilizar Literalura? 🔨 
 ### Paso 1: Ejecuta el proyecto
