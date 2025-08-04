@@ -69,7 +69,9 @@ public class Principal {
                 case 3:
                     listarAutoresRegistrados();
                     break;
-
+                case 4:
+                    listarAutoresVivosEnDeterminadoAno();
+                    break;
                 case 5:
                     buscarLibrosPorIdioma();
                 case 0:
@@ -79,62 +81,6 @@ public class Principal {
                     System.out.println("Escoja una opción válida.");
             }
         }
-    }
-
-    private void buscarLibrosPorIdioma() {
-        String menu = ("""
-                -----------------------------------
-                Inserte el idioma de los libros que desee buscar:
-                1 - Español
-                2 - Inglés
-                3 - Portugués
-                -----------------------------------
-                """);
-        int opcionIdioma = 0;
-        while (opcionIdioma < 1 || opcionIdioma > 3) {
-            try {
-                System.out.println(menu);
-                opcionIdioma = sc.nextInt();
-                sc.nextLine();
-                if (opcionIdioma >= 1 && opcionIdioma <= 3) break;
-                else System.out.println("Por favor, seleccione una de las opciones disponibles.");
-            } catch (InputMismatchException e) {
-                System.out.println("La opción debe ser un número entero.");
-                sc.nextLine();
-                opcionIdioma = 0;
-            }
-        }
-
-        Optional<List<Libro>> librosIdiomados;
-        switch (opcionIdioma){
-            case 1:
-                librosIdiomados = libroRepository.findByIdioma("es");
-                if (librosIdiomados.isPresent()) {
-                    librosIdiomados.get().forEach(System.out::println);
-                }else{
-                    System.out.println("No se encontraron resultados en ese idioma.");
-                }
-                break;
-            case 2:
-                librosIdiomados = libroRepository.findByIdioma("en");
-                if (librosIdiomados.isPresent()) {
-                    librosIdiomados.get().forEach(System.out::println);
-                }else{
-                    System.out.println("No se encontraron resultados en ese idioma.");
-                }
-                break;
-            case 3:
-                librosIdiomados = libroRepository.findByIdioma("pt");
-                if (librosIdiomados.isPresent()) {
-                    librosIdiomados.get().forEach(System.out::println);
-                }else{
-                    System.out.println("No se encontraron resultados en ese idioma.");
-                }
-                break;
-            default: System.out.println("Algo salio mal.");
-        }
-
-
     }
 
     public void buscarLibroWeb() {
@@ -202,5 +148,85 @@ public class Principal {
         autores.stream()
                 .sorted(Comparator.comparing(Autor::getNombre))
                 .forEach(System.out::println);
+    }
+
+    private void listarAutoresVivosEnDeterminadoAno() {
+        System.out.println("Ingrese el año que desea buscar: ");
+        int ano;
+        while(true) {
+            try {
+                ano = sc.nextInt();
+                sc.nextLine();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println();
+                sc.nextLine();
+                System.out.println("Por favor, ingrese un año válido.");
+            }
+        }
+
+        List<Autor> listaAutores = servicioAutor.obtenerAutoresVivos(ano);
+        //System.out.println("se obtuvo: " + listaAutores);
+        if(!listaAutores.isEmpty()){
+            listaAutores.stream()
+                    .sorted(Comparator.comparing(Autor::getAnoNacimiento))
+                    .forEach(l -> System.out.println(l.getNombre() + " - " + l.getAnoNacimiento() + ", " + l.getAnoFallecimiento()));
+        }
+    }
+
+    private void buscarLibrosPorIdioma() {
+        String menu = ("""
+                -----------------------------------
+                Inserte el idioma de los libros que desee buscar:
+                1 - Español
+                2 - Inglés
+                3 - Portugués
+                -----------------------------------
+                """);
+        int opcionIdioma = 0;
+        while (opcionIdioma < 1 || opcionIdioma > 3) {
+            try {
+                System.out.println(menu);
+                opcionIdioma = sc.nextInt();
+                sc.nextLine();
+                if (opcionIdioma >= 1 && opcionIdioma <= 3) break;
+                else System.out.println("Por favor, seleccione una de las opciones disponibles.");
+            } catch (InputMismatchException e) {
+                System.out.println("La opción debe ser un número entero.");
+                sc.nextLine();
+                opcionIdioma = 0;
+            }
+        }
+
+        Optional<List<Libro>> librosIdiomados;
+        switch (opcionIdioma){
+            case 1:
+                librosIdiomados = libroRepository.findByIdioma("es");
+                if (librosIdiomados.isPresent()) {
+                    librosIdiomados.get().forEach(System.out::println);
+                }else{
+                    System.out.println("No se encontraron resultados en ese idioma.");
+                }
+                break;
+            case 2:
+                librosIdiomados = libroRepository.findByIdioma("en");
+                if (librosIdiomados.isPresent()) {
+                    librosIdiomados.get().forEach(System.out::println);
+                }else{
+                    System.out.println("No se encontraron resultados en ese idioma.");
+                }
+                break;
+            case 3:
+                librosIdiomados = libroRepository.findByIdioma("pt");
+                if (librosIdiomados.isPresent()) {
+                    librosIdiomados.get().forEach(System.out::println);
+                }else{
+                    System.out.println("No se encontraron resultados en ese idioma.");
+                }
+                break;
+            default: System.out.println("Algo salio mal.");
+        }
+
+
     }
 }
