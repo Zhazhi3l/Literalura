@@ -130,12 +130,11 @@ public class Principal {
     }
 
     private void listarLibrosRegistrados(){
-        if (!libros.isEmpty())
-            libros.stream()
-                    .forEach(System.out::println);
-                    //.forEach(libro -> System.out.println(libro + "\n" + libro.getAutor()));
-        else
-            System.out.println("No hay libros registrados.");
+        List<Libro> series = libroRepository.findAll();
+
+        series.stream()
+                .sorted(Comparator.comparing(Libro::getTitulo))
+                .forEach(System.out::println);
     }
 
     private void listarAutoresRegistrados(){
